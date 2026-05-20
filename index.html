@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen de Conducción - 70 Preguntas</title>
+    <title>Examen de Conducción - 82 Preguntas</title>
     <style>
         * {
             margin: 0;
@@ -342,7 +342,7 @@
 <div class="container">
     <div class="header">
         <h1>🚗 Examen de Conducción</h1>
-        <p>Manejo Defensivo (10) + Evaluación Psicológica (60) = 70 Preguntas</p>
+        <p>Manejo Defensivo (10) + Evaluación Psicológica (72) = 82 Preguntas</p>
     </div>
 
     <div class="content">
@@ -383,8 +383,8 @@
                 <div style="background: #e8f0ff; padding: 20px; border-radius: 10px; margin: 20px 0;">
                     <strong>📋 Información del Examen:</strong><br>
                     ✓ Sección 1: Manejo Defensivo (10 preguntas)<br>
-                    ✓ Sección 2: Evaluación Psicológica (60 preguntas)<br>
-                    ✓ Total: 70 preguntas<br>
+                    ✓ Sección 2: Evaluación Psicológica (72 preguntas)<br>
+                    ✓ Total: 82 preguntas<br>
                     ✓ Tiempo: 30 segundos por pregunta<br>
                     ✓ Duración aproximada: 35 minutos
                 </div>
@@ -398,7 +398,7 @@
             <div class="transicion activa">
                 <h2>🧠 Evaluación Psicológica</h2>
                 <p>Ahora comenzará la segunda parte del examen</p>
-                <p>Contiene 60 preguntas sobre aspectos psicológicos de la conducción</p>
+                <p>Contiene 72 preguntas sobre aspectos psicológicos de la conducción</p>
                 <p style="font-size: 14px; margin-top: 20px;">Iniciando en:</p>
                 <div class="contador-transicion" id="contadorTransicion">5</div>
                 <button class="responder" onclick="saltarTransicion()" style="background: rgba(255,255,255,0.3);">Continuar Ahora →</button>
@@ -412,7 +412,7 @@
                     <div class="barra-progreso-llena" id="barraProgreso" style="width: 0%"></div>
                 </div>
                 <div class="info-progreso">
-                    Pregunta <span id="numeroPregunta">1</span> de <span id="totalPreguntas">70</span>
+                    Pregunta <span id="numeroPregunta">1</span> de <span id="totalPreguntas">82</span>
                 </div>
             </div>
 
@@ -423,6 +423,7 @@
             <div class="pregunta-box">
                 <div class="numero-pregunta" id="numeroPreguntaBox">Pregunta 1</div>
                 <div class="pregunta" id="preguntaTexto">Pregunta...</div>
+                <div id="imagenPregunta" style="margin:20px 0; text-align:center;"></div>
                 <div class="opciones" id="opciones"></div>
             </div>
         </div>
@@ -505,8 +506,25 @@
     /* ===================== ENCUESTA 70 PREGUNTAS ===================== */
     let encuesta = {
         manejo: [
-            { num: 1, pregunta: 'Las camionetas SUV y miniván, ¿a qué grupo de prioridad vehicular pertenecen?', opciones: ['Primera', 'Tercera', 'Segunda', 'Cuarta'], correcta: 3 },
-            { num: 2, pregunta: 'Un choque EVITABLE es cuando el conductor no hace todo lo __________ para evitarlo', opciones: ['Que estaba en su poder', 'Realizable', 'Posible', 'Razonable'], correcta: 3 },
+            {
+             num: 1,
+                  pregunta: 'En la imagen cuál es el orden que deben pasar los vehículos en base a la prioridad vehicular y derecho de paso',
+                     imagen: 'imagenes/pregunta1.jpg',
+                     opciones: ['1, 2, 3, 4', '2, 3, 4, 1', '4, 1, 3, 2'],
+                        correcta: 2
+                    },
+                    {
+    num: 2,
+    pregunta: '¿Qué debe hacer un conductor al acercarse a una curva peligrosa?',
+    
+    opciones: [
+        'Aumentar la velocidad',
+        'Mantener la misma velocidad',
+        'Reducir la velocidad y estar atento',
+        'Tocar bocina constantemente'
+    ],
+    correcta: 2
+},
             { num: 3, pregunta: '¿Qué debemos hacer cuando nos adelantan?', opciones: ['Bajar la velocidad y facilitar la maniobra', 'Acelerar para evitar que nos sobrepase', 'NADA, el que adelanta hace toda la maniobra', 'Ninguna es válida'], correcta: 0 },
             { num: 4, pregunta: 'Usted puede traspasar una línea blanca discontinua que separa los carriles del tránsito que circulan en el mismo sentido', opciones: ['Verdadero', 'Falso', 'Es indistinto', 'Ninguna de las anteriores'], correcta: 0 },
             { num: 5, pregunta: 'Si existe pocas posibilidades de que ocurra un accidente, ¿podría correr algunos riesgos al conducir?', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 },
@@ -577,6 +595,30 @@
             { num: 68, pregunta: 'Me comprometo a ser un conductor responsable', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 69, pregunta: 'Siento que este examen me ayudará a ser mejor conductor', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 70, pregunta: 'Estoy dispuesto a mejorar continuamente mi conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] }
+            ,
+{ num: 71, pregunta: 'Siempre me apego a las normas de tránsito incluso cuando no lo considero necesario', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 72, pregunta: 'Nunca he excedido el límite de velocidad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 73, pregunta: 'Aunque tenga que llegar pronto a alguna parte, cumplo con las normas de seguridad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 74, pregunta: 'Reviso aspectos adicionales para mejorar la seguridad de mi vehículo', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 75, pregunta: 'Si mi vehículo no se encuentra en condiciones adecuadas, no comienzo mi ruta', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 76, pregunta: 'Jamás texteo mientras conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 77, pregunta: 'Puedo manejar el estrés mejor que la mayoría de las personas', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 78, pregunta: 'Se me facilita tomar decisiones prudentes cuando estoy bajo presión al conducir', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 79, pregunta: 'No conduzco si estoy estresado en el camino', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 80, pregunta: 'Permanezco tranquilo en situaciones de estrés y emergencias', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 81, pregunta: 'Asumir riesgos al conducir va contra mi naturaleza', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+
+{ num: 82, pregunta: 'No me emociona conducir arriesgadamente', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] }
         ]
     };
 
@@ -613,17 +655,24 @@
         let pregunta = preguntas[indexPregunta];
         
         document.getElementById('tituloSeccion').innerText = 
-            seccion === 'manejo' ? '📘 Manejo Defensivo (10 preguntas)' : '🧠 Evaluación Psicológica (60 preguntas)';
+            seccion === 'manejo' ? '📘 Manejo Defensivo (10 preguntas)' : '🧠 Evaluación Psicológica (72 preguntas)';
 
         document.getElementById('numeroPreguntaBox').innerText = `Pregunta ${pregunta.num}`;
         document.getElementById('numeroPregunta').innerText = pregunta.num;
-        document.getElementById('totalPreguntas').innerText = '70';
+        document.getElementById('totalPreguntas').innerText = '82';
 
         // Actualizar barra de progreso
-        let progreso = (pregunta.num / 70) * 100;
+        let progreso = (pregunta.num / 82) * 100;
         document.getElementById('barraProgreso').style.width = progreso + '%';
 
         document.getElementById('preguntaTexto').innerText = pregunta.pregunta;
+        if (pregunta.imagen) {
+             document.getElementById('imagenPregunta').innerHTML =
+                                `<img src="${pregunta.imagen}" 
+                                style="max-width:100%; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.2);">`;
+        } else {
+             document.getElementById('imagenPregunta').innerHTML = '';
+}
 
         document.getElementById('opciones').innerHTML = pregunta.opciones.map((o, i) =>
             `<div class="opcion" onclick="responder(${i})">${o}</div>`
