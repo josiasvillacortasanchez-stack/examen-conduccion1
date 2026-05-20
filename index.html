@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Conducción - 70 Preguntas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .botones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            padding: 20px;
+            color: white;
+            font-size: 18px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .responder {
+            background: #00b894;
+        }
+
+        .admin {
+            background: #0984e3;
+        }
+
+        .vista {
+            display: none;
+        }
+
+        .activa {
+            display: block;
+        }
+
+        .campo {
+            margin-bottom: 20px;
+        }
+
+        .campo label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .campo input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .progreso-container {
+            margin-bottom: 20px;
+        }
+
+        .barra-progreso {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .barra-progreso-llena {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+
+        .info-progreso {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        .seccion-titulo {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .transicion {
+            display: none;
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .transicion.activa {
+            display: block;
+        }
+
+        .transicion h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .transicion p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .contador-transicion {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .pregunta-box {
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .numero-pregunta {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .pregunta {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .opciones {
+            display: grid;
+            gap: 12px;
+        }
+
+        .opcion {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .opcion:hover {
+            border-color: #667eea;
+            background: #f9f9f9;
+        }
+
+        .opcion.seleccionada {
+            background: #e8f0ff;
+            border-color: #667eea;
+            font-weight: bold;
+        }
+
+        .cronometro {
+            margin-top: 20px;
+            font-size: 25px;
+            font-weight: bold;
+            text-align: right;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+
+        .cronometro.peligro {
+            background: #ffcccc;
+            color: #d32f2f;
+            animation: blink 0.5s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
+
+        .resultado {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .resultado h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .resultado-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .porcentaje {
+            font-size: 60px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .detalle-resultado {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .detalle-fila {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detalle-fila:last-child {
+            border-bottom: none;
+        }
+
+        .gracias {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .tabla {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .tabla th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .tabla td {
+            border-bottom: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        .oculto {
+            display: none;
+        }
+
+        .estado-aprobado {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .estado-reprobado {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        @media(max-width: 768px) {
+            .botones {
+                grid-template-columns: 1fr;
+            }
+            .porcentaje {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🚗 Examen de Conducción</h1>
+        <p>Manejo Defensivo (10) + Evaluación Psicológica (60) = 70 Preguntas</p>
+    </div>
+
+    <div class="content">
+
+        <!-- INICIO -->
+        <div id="inicio" class="vista activa">
+            <h2>¿Qué deseas hacer?</h2>
+            <div class="botones">
+                <button class="responder" onclick="mostrarDatos()">👤 Responder Evaluación</button>
+                <button class="admin" onclick="verAdmin()">📊 Ver Resultados</button>
+            </div>
+
+            <div style="margin-top: 30px; background: #fff3cd; padding: 20px; border-radius: 10px;">
+                <h3>🔐 Contraseña Admin</h3>
+                <div style="font-size: 30px; font-weight: bold; margin-top: 10px; color: #667eea; letter-spacing: 2px;" id="mostrarPass">CARGANDO...</div>
+                <div style="font-size: 12px; color: #666; margin-top: 8px;">Usa esta contraseña para ver los resultados</div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3>📋 Link para compartir</h3>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-top: 10px; word-break: break-all; font-size: 12px;" id="linkResponder">Cargando...</div>
+                <button onclick="copiarLink()" style="margin-top: 10px; background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">📋 Copiar Link</button>
+            </div>
+        </div>
+
+        <!-- DATOS -->
+        <div id="vistaDatos" class="vista">
+            <h2>Ingresa tus datos</h2>
+            <form onsubmit="iniciarExamen(event)">
+                <div class="campo">
+                    <label>Nombre Completo *</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                <div class="campo">
+                    <label>DNI / Cédula *</label>
+                    <input type="text" id="dni" required>
+                </div>
+                <div style="background: #e8f0ff; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <strong>📋 Información del Examen:</strong><br>
+                    ✓ Sección 1: Manejo Defensivo (10 preguntas)<br>
+                    ✓ Sección 2: Evaluación Psicológica (60 preguntas)<br>
+                    ✓ Total: 70 preguntas<br>
+                    ✓ Tiempo: 30 segundos por pregunta<br>
+                    ✓ Duración aproximada: 35 minutos
+                </div>
+                <button class="responder" style="width: 100%;">Comenzar Evaluación</button>
+            </form>
+            <button class="admin" style="width: 100%; margin-top: 10px; background: #999;" onclick="mostrarVista('inicio')">← Volver</button>
+        </div>
+
+        <!-- TRANSICIÓN -->
+        <div id="vistaTransicion" class="vista">
+            <div class="transicion activa">
+                <h2>🧠 Evaluación Psicológica</h2>
+                <p>Ahora comenzará la segunda parte del examen</p>
+                <p>Contiene 60 preguntas sobre aspectos psicológicos de la conducción</p>
+                <p style="font-size: 14px; margin-top: 20px;">Iniciando en:</p>
+                <div class="contador-transicion" id="contadorTransicion">5</div>
+                <button class="responder" onclick="saltarTransicion()" style="background: rgba(255,255,255,0.3);">Continuar Ahora →</button>
+            </div>
+        </div>
+
+        <!-- EXAMEN -->
+        <div id="vistaExamen" class="vista">
+            <div class="progreso-container">
+                <div class="barra-progreso">
+                    <div class="barra-progreso-llena" id="barraProgreso" style="width: 0%"></div>
+                </div>
+                <div class="info-progreso">
+                    Pregunta <span id="numeroPregunta">1</span> de <span id="totalPreguntas">70</span>
+                </div>
+            </div>
+
+            <div class="seccion-titulo" id="tituloSeccion">Manejo Defensivo</div>
+
+            <div class="cronometro" id="cronometro">30s</div>
+
+            <div class="pregunta-box">
+                <div class="numero-pregunta" id="numeroPreguntaBox">Pregunta 1</div>
+                <div class="pregunta" id="preguntaTexto">Pregunta...</div>
+                <div class="opciones" id="opciones"></div>
+            </div>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div id="vistaResultados" class="vista resultado">
+            <h2>📊 Resultado Final</h2>
+
+            <div class="resultado-card">
+                <div class="porcentaje" id="porcentajeFinal">0%</div>
+                <div style="font-size: 18px;">Examen Completado</div>
+            </div>
+
+            <div class="detalle-resultado">
+                <div class="detalle-fila">
+                    <span>📘 Manejo Defensivo (10 preguntas)</span>
+                    <span id="porcentajeManejo" style="font-weight: bold; color: #667eea;">0%</span>
+                </div>
+                <div class="detalle-fila">
+                    <span>🧠 Evaluación Psicológica (60 preguntas)</span>
+                    <span id="porcentajePsico" style="font-weight: bold; color: #667eea;">0%</span>
+                </div>
+                <div class="detalle-fila" style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <span style="font-weight: bold;">PROMEDIO FINAL (50% + 50%)</span>
+                    <span id="promedioFinal" style="font-weight: bold; font-size: 18px; color: #667eea;">0%</span>
+                </div>
+            </div>
+
+            <div id="estadoResultado" class="estado-aprobado">✅ APROBADO</div>
+
+            <div class="gracias">
+    ✅ Gracias por completar la evaluación.<br><br>
+    Sus respuestas fueron registradas correctamente.<br>
+    Puede cerrar esta ventana.
+</div>
+
+            
+        </div>
+
+        <!-- ADMIN -->
+        <div id="vistaAdmin" class="vista">
+            <h2>📊 Resultados de Evaluaciones</h2>
+            <button class="admin" style="background: #d32f2f; margin-bottom: 20px;" onclick="mostrarVista('inicio')">← Cerrar Sesión</button>
+            
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>DNI</th>
+                        <th>MD</th>
+                        <th>Psico</th>
+                        <th>Promedio</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaResultados"></tbody>
+            </table>
+
+            <button class="responder" style="width: 100%; margin-top: 20px;" onclick="descargarCSV()">📥 Descargar CSV</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    /* ===================== VARIABLES ===================== */
+    let respuestasGuardadas = [];
+
+    const API_URL = "https://script.google.com/macros/s/AKfycbyZV4196K53jpThrC8fwnZxbs0o3aVtAggABLB8dq-cLMGiu48zk8iE-WSFztgznFDQ/exec";
+    let pass = localStorage.getItem('passAdmin') || generarPass();
+    let nombreActual = '';
+    let dniActual = '';
+    let respuestas = {};
+    let seccion = 'manejo';
+    let indexPregunta = 0;
+    let tiempo = 30;
+    let intervalo;
+    let transicionActiva = false;
+
+    /* ===================== ENCUESTA 70 PREGUNTAS ===================== */
+    let encuesta = {
+        manejo: [
+            { num: 1, pregunta: 'Las camionetas SUV y miniván, ¿a qué grupo de prioridad vehicular pertenecen?', opciones: ['Primera', 'Tercera', 'Segunda', 'Cuarta'], correcta: 3 },
+            { num: 2, pregunta: 'Un choque EVITABLE es cuando el conductor no hace todo lo __________ para evitarlo', opciones: ['Que estaba en su poder', 'Realizable', 'Posible', 'Razonable'], correcta: 3 },
+            { num: 3, pregunta: '¿Qué debemos hacer cuando nos adelantan?', opciones: ['Bajar la velocidad y facilitar la maniobra', 'Acelerar para evitar que nos sobrepase', 'NADA, el que adelanta hace toda la maniobra', 'Ninguna es válida'], correcta: 0 },
+            { num: 4, pregunta: 'Usted puede traspasar una línea blanca discontinua que separa los carriles del tránsito que circulan en el mismo sentido', opciones: ['Verdadero', 'Falso', 'Es indistinto', 'Ninguna de las anteriores'], correcta: 0 },
+            { num: 5, pregunta: 'Si existe pocas posibilidades de que ocurra un accidente, ¿podría correr algunos riesgos al conducir?', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 },
+            { num: 6, pregunta: 'De ser posible, prefiero no tomar riesgos', opciones: ['De acuerdo', 'En desacuerdo', 'No estoy seguro', 'Totalmente en desacuerdo'], correcta: 0 },
+            { num: 7, pregunta: 'Puedo hacer mi trabajo más rápido si corro algunos riesgos', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 },
+            { num: 8, pregunta: 'No creo que correr riesgos me ayude a hacer mi trabajo más rápido', opciones: ['De acuerdo', 'En desacuerdo', 'No estoy seguro', 'Totalmente en desacuerdo'], correcta: 0 },
+            { num: 9, pregunta: 'No es necesario asumir riesgos en el trabajo para tener éxito', opciones: ['De acuerdo', 'En desacuerdo', 'No estoy seguro', 'Totalmente en desacuerdo'], correcta: 0 },
+            { num: 10, pregunta: 'Para mí, los riesgos de conducir son aceptables si los beneficios son altos', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 }
+        ],
+        psicologico: [
+            { num: 11, pregunta: 'No me considero más cuidadoso que el conductor promedio', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 12, pregunta: 'Mi capacidad para tomar decisiones cuando conduzco no se ve obstaculizada por la presión', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 13, pregunta: 'Me alteran las situaciones de emergencia y estresantes en el trabajo', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 14, pregunta: 'La presión de conducir no me hace cometer errores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 15, pregunta: 'No considero difícil respetar todas las reglas de tránsito al conducir', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 16, pregunta: 'Asumo riesgos al conducir si hay pocas posibilidades de resultar herido', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 17, pregunta: 'Normalmente no necesito que me recuerden que debo seguir las normas de seguridad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 18, pregunta: 'No me gusta asumir riesgos cuando conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 19, pregunta: 'Soy capaz de soportar mucha presión cuando conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 20, pregunta: 'No es fácil que me altere ante situaciones estresantes cuando estoy conduciendo', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 21, pregunta: 'Tengo buenos reflejos cuando algo inesperado sucede en la carretera', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 22, pregunta: 'Me gusta la velocidad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 23, pregunta: 'A veces conduzco más rápido cuando estoy apurado', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 24, pregunta: 'Puedo concentrarme bien mientras conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 25, pregunta: 'No me distraigo fácilmente al conducir', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 26, pregunta: 'Prefiero evitar situaciones de conflicto en la carretera', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 27, pregunta: 'Me irrito fácilmente con otros conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 28, pregunta: 'Respeto los límites de velocidad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 29, pregunta: 'Mantengo la distancia de seguridad con otros vehículos', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 30, pregunta: 'He tenido accidentes o infracciones de tránsito', opciones: ['Nunca', 'Una vez', 'Dos o tres veces', 'Más de tres veces'] },
+            { num: 31, pregunta: 'Considero que soy un conductor responsable', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 32, pregunta: 'Uso siempre el cinturón de seguridad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 33, pregunta: 'No uso el teléfono mientras conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 34, pregunta: 'Conduzco mejor que la mayoría de los conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 35, pregunta: 'Me gusta competir con otros conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 36, pregunta: 'Siento ansiedad al conducir en carreteras desconocidas', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 37, pregunta: 'He conducido después de beber alcohol', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'] },
+            { num: 38, pregunta: 'Considero importante revisar mi vehículo regularmente', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 39, pregunta: 'Siento miedo al conducir en lluvia o nieve', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 40, pregunta: 'Me cuesta adaptarme a nuevas normas de tránsito', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 41, pregunta: 'Recibo retroalimentación constructiva sobre mis hábitos de conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 42, pregunta: 'He tomado cursos de conducción defensiva', opciones: ['Nunca', 'Una vez', 'Dos o tres veces', 'Más de tres veces'] },
+            { num: 43, pregunta: 'Me interesa mejorar mis habilidades de conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 44, pregunta: 'Conduzco principalmente en horario diurno', opciones: ['Casi siempre', 'Frecuentemente', 'Ocasionalmente', 'Casi nunca'] },
+            { num: 45, pregunta: 'Me siento cómodo conduciendo en la noche', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 46, pregunta: 'Soy paciente con conductores novatos o lentosotros', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 47, pregunta: 'Considero que la experiencia es suficiente para conducir bien', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 48, pregunta: 'Sigo las señales de tránsito sin cuestionarlas', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 49, pregunta: 'He estacionado en lugares prohibidos', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'] },
+            { num: 50, pregunta: 'Puedo mantener la calma en situaciones de tránsito caótico', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 51, pregunta: 'Me cuesta adaptarme a cambios rápidos en el tránsito', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 52, pregunta: 'He conducido cuando estaba muy cansado', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'] },
+            { num: 53, pregunta: 'Reconozco cuando no estoy en condiciones de conducir', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 54, pregunta: 'La seguridad es más importante que la rapidez', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 55, pregunta: 'Considero que revisar puntos ciegos es importante', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 56, pregunta: 'Me intimida conducir en carreteras de alto tráfico', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 57, pregunta: 'Siento que tengo control total de mi vehículo', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 58, pregunta: 'He adelantado en lugares prohibidos', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'] },
+            { num: 59, pregunta: 'Respeto las decisiones de conducción de los demás', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 60, pregunta: 'Me resulta fácil perdonar los errores de otros conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 61, pregunta: 'Considero que la música fuerte distrae mientras conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 62, pregunta: 'Soy consciente de mis limitaciones como conductor', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 63, pregunta: 'Tengo una actitud positiva hacia la seguridad vial', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 64, pregunta: 'He ayudado a otros conductores en situaciones de emergencia', opciones: ['Nunca', 'Una vez', 'Dos o tres veces', 'Frecuentemente'] },
+            { num: 65, pregunta: 'La salud mental afecta mi conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 66, pregunta: 'Creo que la edad no es factor determinante en la conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 67, pregunta: 'He recibido educación sobre riesgos de conducción', opciones: ['Nunca', 'Una vez', 'Dos o tres veces', 'Regularmente'] },
+            { num: 68, pregunta: 'Me comprometo a ser un conductor responsable', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 69, pregunta: 'Siento que este examen me ayudará a ser mejor conductor', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 70, pregunta: 'Estoy dispuesto a mejorar continuamente mi conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] }
+        ]
+    };
+
+    /* ===================== FUNCIONES ===================== */
+
+    function generarPass() {
+        let p = Math.random().toString(36).substring(2, 10).toUpperCase();
+        localStorage.setItem('passAdmin', p);
+        return p;
+    }
+
+    function mostrarVista(id) {
+        document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
+        document.getElementById(id).classList.add('activa');
+    }
+
+    function mostrarDatos() {
+        mostrarVista('vistaDatos');
+    }
+
+    function iniciarExamen(e) {
+        e.preventDefault();
+        nombreActual = document.getElementById('nombre').value;
+        dniActual = document.getElementById('dni').value;
+        respuestas = {};
+        seccion = 'manejo';
+        indexPregunta = 0;
+        mostrarVista('vistaExamen');
+        mostrarPregunta();
+    }
+
+    function mostrarPregunta() {
+        let preguntas = encuesta[seccion];
+        let pregunta = preguntas[indexPregunta];
+        
+        document.getElementById('tituloSeccion').innerText = 
+            seccion === 'manejo' ? '📘 Manejo Defensivo (10 preguntas)' : '🧠 Evaluación Psicológica (60 preguntas)';
+
+        document.getElementById('numeroPreguntaBox').innerText = `Pregunta ${pregunta.num}`;
+        document.getElementById('numeroPregunta').innerText = pregunta.num;
+        document.getElementById('totalPreguntas').innerText = '70';
+
+        // Actualizar barra de progreso
+        let progreso = (pregunta.num / 70) * 100;
+        document.getElementById('barraProgreso').style.width = progreso + '%';
+
+        document.getElementById('preguntaTexto').innerText = pregunta.pregunta;
+
+        document.getElementById('opciones').innerHTML = pregunta.opciones.map((o, i) =>
+            `<div class="opcion" onclick="responder(${i})">${o}</div>`
+        ).join('');
+
+        reiniciarTiempo();
+    }
+
+    function responder(i) {
+        respuestas[`${seccion}_${indexPregunta}`] = i;
+        siguiente();
+    }
+
+    function siguiente() {
+        let preguntas = encuesta[seccion];
+
+        if (indexPregunta < preguntas.length - 1) {
+            indexPregunta++;
+            mostrarPregunta();
+        } else {
+            if (seccion === 'manejo') {
+                mostrarTransicion();
+            } else {
+                terminar();
+            }
+        }
+    }
+
+    function mostrarTransicion() {
+        clearInterval(intervalo);
+        seccion = 'psicologico';
+        indexPregunta = 0;
+        transicionActiva = true;
+        mostrarVista('vistaTransicion');
+
+        let contador = 5;
+        document.getElementById('contadorTransicion').innerText = contador;
+
+        let contadorInterval = setInterval(() => {
+            contador--;
+            document.getElementById('contadorTransicion').innerText = contador;
+            if (contador <= 0) {
+                clearInterval(contadorInterval);
+                saltarTransicion();
+            }
+        }, 1000);
+    }
+
+    function saltarTransicion() {
+        mostrarVista('vistaExamen');
+        mostrarPregunta();
+    }
+
+    function reiniciarTiempo() {
+        clearInterval(intervalo);
+        tiempo = 30;
+        document.getElementById('cronometro').innerText = tiempo + 's';
+        document.getElementById('cronometro').classList.remove('peligro');
+
+        intervalo = setInterval(() => {
+            tiempo--;
+            document.getElementById('cronometro').innerText = tiempo + 's';
+
+            if (tiempo <= 10) {
+                document.getElementById('cronometro').classList.add('peligro');
+            }
+
+            if (tiempo <= 0) {
+                siguiente();
+            }
+        }, 1000);
+    }
+
+    function terminar() {
+        clearInterval(intervalo);
+
+        // ===== MANEJO (Respuestas correctas/incorrectas) =====
+        let correctasManejo = 0;
+        encuesta.manejo.forEach((p, i) => {
+            if (respuestas[`manejo_${i}`] === p.correcta) {
+                correctasManejo++;
+            }
+        });
+        let porcentajeManejo = (correctasManejo / encuesta.manejo.length) * 100;
+
+        // ===== PSICOLÓGICO (Escala Likert) =====
+        let puntosPsico = 0;
+        encuesta.psicologico.forEach((p, i) => {
+            let respuesta = respuestas[`psicologico_${i}`];
+            if (respuesta !== undefined) {
+                // Escala: 0=1punto, 1=2puntos, 2=3puntos, 3=4puntos
+                puntosPsico += (respuesta + 1);
+            }
+        });
+        let maximoPuntos = encuesta.psicologico.length * 4;
+        let porcentajePsico = (puntosPsico / maximoPuntos) * 100;
+
+        // ===== PROMEDIO FINAL (50% + 50%) =====
+        let promedioFinal = (porcentajeManejo * 0.5) + (porcentajePsico * 0.5);
+        let aprobado = promedioFinal >= 60;
+
+        // ===== GUARDAR =====
+        let resultado = {
+            nombre: nombreActual,
+            dni: dniActual,
+            manejo: porcentajeManejo.toFixed(1),
+            psicologia: porcentajePsico.toFixed(1),
+            promedio: promedioFinal.toFixed(1),
+            estado: aprobado ? 'APROBADO' : 'DESAPROBADO'
+        };
+
+        fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(resultado)
+})
+.then(res => res.text())
+.then(data => {
+    console.log("Guardado:", data);
+})
+.catch(err => {
+    console.error("Error:", err);
+});
+
+        // ===== MOSTRAR =====
+        mostrarVista('vistaResultados');
+        document.getElementById('porcentajeFinal').innerText = promedioFinal.toFixed(1) + '%';
+        document.getElementById('porcentajeManejo').innerText = porcentajeManejo.toFixed(1) + '%';
+        document.getElementById('porcentajePsico').innerText = porcentajePsico.toFixed(1) + '%';
+        document.getElementById('promedioFinal').innerText = promedioFinal.toFixed(1) + '%';
+
+        let estadoDiv = document.getElementById('estadoResultado');
+        if (aprobado) {
+            estadoDiv.className = 'estado-aprobado';
+            estadoDiv.innerText = '✅ APROBADO - Felicidades';
+        } else {
+            estadoDiv.className = 'estado-reprobado';
+            estadoDiv.innerText = '❌ DESAPROBADO - Intenta nuevamente';
+        }
+    }
+
+    function verAdmin() {
+
+    let p = prompt('🔐 Ingrese contraseña admin');
+
+    if (p !== pass) {
+        alert('❌ Contraseña incorrecta');
+        return;
+    }
+
+    fetch(API_URL)
+    .then(res => res.json())
+    .then(data => {
+
+        respuestasGuardadas = data;
+
+        mostrarVista('vistaAdmin');
+
+        document.getElementById('tablaResultados').innerHTML =
+        respuestasGuardadas.map(r => `
+            <tr>
+                <td>${r.nombre}</td>
+                <td>${r.dni}</td>
+                <td>${r.manejo}%</td>
+                <td>${r.psicologia}%</td>
+                <td><strong>${r.promedio}%</strong></td>
+                <td>
+                    <strong style="color:${r.estado === 'APROBADO' ? '#28a745' : '#dc3545'}">
+                        ${r.estado}
+                    </strong>
+                </td>
+            </tr>
+        `).join('');
+
+    })
+    .catch(err => {
+        alert("Error cargando resultados");
+        console.error(err);
+    });
+}
+
+    function descargarCSV() {
+        let csv = 'Nombre,DNI,Manejo (%),Psicología (%),Promedio (%),Estado\n';
+        respuestasGuardadas.forEach(r => {
+            csv += `"${r.nombre}","${r.dni}",${r.manejo},${r.psicologia},${r.promedio},"${r.estado}"\n`;
+        });
+
+        let blob = new Blob([csv], { type: 'text/csv' });
+        let url = URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = 'resultados_examen.csv';
+        a.click();
+    }
+
+    function copiarLink() {
+        let url = window.location.href.split('?')[0] + '?modo=responder';
+        navigator.clipboard.writeText(url);
+        alert('✓ Link copiado');
+    }
+
+    // ===== INICIALIZACIÓN =====
+    document.getElementById('mostrarPass').innerText = pass;
+    const baseUrl = window.location.href.split('?')[0];
+    document.getElementById('linkResponder').innerText = baseUrl + '?modo=responder';
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('modo') === 'responder') {
+        mostrarDatos();
+    }
+</script>
+
+</body>
+</html>
