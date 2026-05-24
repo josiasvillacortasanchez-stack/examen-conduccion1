@@ -519,7 +519,7 @@
     /* ===================== VARIABLES ===================== */
     let respuestasGuardadas = [];
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbyCHbshGYFBpxcYOBoA0wexuEMDnmrtID_jFDfur4ntCJQOFPDtPDsB1lcPe2rrWm7D/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyefOEguGJailJQV7_xZ5BwxQgXO_q2qpAn_-QNqRXuGzGSMOJDNoIUbioTOjaWwq5s/exec";
     let pass = localStorage.getItem('passAdmin') || generarPass();
     let nombreActual = '';
     let dniActual = '';
@@ -998,14 +998,26 @@
     }
 
     // ===== INICIALIZACIÓN =====
-    document.getElementById('mostrarPass').innerText = pass;
-    const baseUrl = window.location.href.split('?')[0];
-    document.getElementById('linkResponder').innerText = baseUrl + '?modo=responder';
-
     const params = new URLSearchParams(window.location.search);
-    if (params.get('modo') === 'responder') {
-        mostrarDatos();
-    }
+
+const esAdmin = params.get('admin') === 'true';
+
+if (esAdmin) {
+
+    document.getElementById('mostrarPass').innerText = pass;
+
+    const baseUrl = window.location.href.split('?')[0];
+
+    document.getElementById('linkResponder').innerText =
+        baseUrl + '?modo=responder';
+
+} else {
+
+    document.getElementById('inicio').style.display = 'none';
+
+    mostrarDatos();
+
+}
 </script>
 
 </body>
