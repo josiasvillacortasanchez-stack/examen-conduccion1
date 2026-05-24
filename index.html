@@ -519,7 +519,7 @@
     /* ===================== VARIABLES ===================== */
     let respuestasGuardadas = [];
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbzO3nUGzNY4mQJ9Q6Skp1WCNaAoYNEZ6Mrx3rRwmAG6LXM2h31xu2eIv_7X5sQSLttV/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbz48Er8J12NnM1MtV7Fl3gHHF0IMLtgl4Vr-LgGJlw4Qj1JRf7YpX92qGkST8JHWKwC/exec";
     let pass = localStorage.getItem('passAdmin') || generarPass();
     let nombreActual = '';
     let dniActual = '';
@@ -904,7 +904,7 @@ fetch(API_URL, {
         setTimeout(() => {
 
             document.getElementById("guardandoOverlay").remove();
-
+             localStorage.setItem("modoEncuesta", "true");   
             mostrarVista('vistaResultados');
 
             document.getElementById('porcentajeFinal').innerText = promedioFinal.toFixed(1) + '%';
@@ -947,22 +947,6 @@ fetch(API_URL, {
     alert("No se pudo conectar con Google Sheets");
 });
 
-        // ===== MOSTRAR =====
-        mostrarVista('vistaResultados');
-        document.getElementById('porcentajeFinal').innerText = promedioFinal.toFixed(1) + '%';
-        document.getElementById('porcentajeManejo').innerText = porcentajeManejo.toFixed(1) + '%';
-        document.getElementById('porcentajePsico').innerText = porcentajePsico.toFixed(1) + '%';
-        document.getElementById('promedioFinal').innerText = promedioFinal.toFixed(1) + '%';
-
-        let estadoDiv = document.getElementById('estadoResultado');
-        mostrarRevision();
-        if (aprobado) {
-            estadoDiv.className = 'estado-aprobado';
-            estadoDiv.innerText = '✅ APROBADO - Felicidades';
-        } else {
-            estadoDiv.className = 'estado-reprobado';
-            estadoDiv.innerText = '❌ DESAPROBADO - Intenta nuevamente';
-        }
     }
 
     function mostrarRevision() {
@@ -1102,7 +1086,7 @@ if (esAdmin) {
 
 } else {
 
-    document.getElementById('inicio').style.display = 'none';
+    mostrarVista('vistaDatos');
 
     mostrarDatos();
 
