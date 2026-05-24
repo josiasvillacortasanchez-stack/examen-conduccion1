@@ -519,7 +519,7 @@
     /* ===================== VARIABLES ===================== */
     let respuestasGuardadas = [];
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbyR1rM4rIQz-ilsbXoe8xM7sMWT0-TdymSvzYWB4naiKTDMVKxJfJH_Vx0c7SjkiERi/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbzO3nUGzNY4mQJ9Q6Skp1WCNaAoYNEZ6Mrx3rRwmAG6LXM2h31xu2eIv_7X5sQSLttV/exec";
     let pass = localStorage.getItem('passAdmin') || generarPass();
     let nombreActual = '';
     let dniActual = '';
@@ -843,19 +843,108 @@
             estado: aprobado ? 'APROBADO' : 'DESAPROBADO'
         };
 
-        fetch(API_URL, {
+        // ===== VENTANA DE CARGA =====
+document.body.innerHTML += `
+<div id="guardandoOverlay" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+">
+
+<div style="
+background:white;
+padding:50px;
+border-radius:20px;
+text-align:center;
+max-width:500px;
+width:90%;
+box-shadow:0 10px 40px rgba(0,0,0,0.4);
+">
+
+<h1 id="estadoGuardado" style="
+font-size:40px;
+margin-bottom:20px;
+color:#667eea;
+">
+⏳ Guardando encuesta...
+</h1>
+
+<p style="font-size:20px;">
+Espere unos segundos
+</p>
+
+</div>
+</div>
+`;
+
+fetch(API_URL, {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
     },
     body: JSON.stringify(resultado)
 })
-.then(res => res.text())
+.then(res => res.json())
 .then(data => {
-    console.log("Guardado:", data);
+
+    console.log(data);
+
+    if(data.success){
+
+        document.getElementById("estadoGuardado").innerHTML =
+        "✅ Encuesta guardada correctamente";
+
+        setTimeout(() => {
+
+            document.getElementById("guardandoOverlay").remove();
+
+            mostrarVista('vistaResultados');
+
+            document.getElementById('porcentajeFinal').innerText = promedioFinal.toFixed(1) + '%';
+            document.getElementById('porcentajeManejo').innerText = porcentajeManejo.toFixed(1) + '%';
+            document.getElementById('porcentajePsico').innerText = porcentajePsico.toFixed(1) + '%';
+            document.getElementById('promedioFinal').innerText = promedioFinal.toFixed(1) + '%';
+
+            let estadoDiv = document.getElementById('estadoResultado');
+
+            mostrarRevision();
+
+            if (aprobado) {
+                estadoDiv.className = 'estado-aprobado';
+                estadoDiv.innerText = '✅ APROBADO - Felicidades';
+            } else {
+                estadoDiv.className = 'estado-reprobado';
+                estadoDiv.innerText = '❌ DESAPROBADO - Intenta nuevamente';
+            }
+
+        }, 2000);
+
+    } else {
+
+        document.getElementById("estadoGuardado").innerHTML =
+        "❌ ERROR AL GUARDAR";
+
+        console.error(data.error);
+
+        alert("Error guardando en Google Sheets");
+    }
+
 })
 .catch(err => {
-    console.error("Error:", err);
+
+    document.getElementById("estadoGuardado").innerHTML =
+    "❌ ERROR DE CONEXIÓN";
+
+    console.error(err);
+
+    alert("No se pudo conectar con Google Sheets");
 });
 
         // ===== MOSTRAR =====
