@@ -1073,24 +1073,12 @@ fetch(API_URL, {
     // ===== INICIALIZACIÓN =====
     const params = new URLSearchParams(window.location.search);
 
-const esAdmin = params.get('admin') === 'true';
+const modo = params.get('modo');
 
-if (esAdmin) {
+document.getElementById('mostrarPass').innerText = pass;
 
-    document.getElementById('mostrarPass').innerText = pass;
+const base
 
-    const baseUrl = window.location.href.split('?')[0];
-
-    document.getElementById('linkResponder').innerText =
-        baseUrl + '?modo=responder';
-
-} else {
-
-    mostrarVista('vistaDatos');
-
-    mostrarDatos();
-
-}
 </script>
 
 </body>
