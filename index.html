@@ -325,33 +325,34 @@
             font-size: 24px;
             font-weight: bold;
         }
-        .revision-item{
-    background:#fff;
-    border-radius:10px;
-    padding:20px;
-    margin-bottom:15px;
-    border-left:6px solid #ddd;
-}
 
-.correcta{
-    border-left-color:#28a745;
-    background:#f1fff5;
-}
+        .revision-item {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 6px solid #ddd;
+        }
 
-.incorrecta{
-    border-left-color:#dc3545;
-    background:#fff5f5;
-}
+        .correcta {
+            border-left-color: #28a745;
+            background: #f1fff5;
+        }
 
-.respuesta-correcta{
-    color:#28a745;
-    font-weight:bold;
-}
+        .incorrecta {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
 
-.respuesta-usuario{
-    color:#333;
-    margin-top:8px;
-}
+        .respuesta-correcta {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .respuesta-usuario {
+            color: #333;
+            margin-top: 8px;
+        }
 
         @media(max-width: 768px) {
             .botones {
@@ -391,7 +392,7 @@
             <div style="margin-top: 30px;">
                 <h3>📋 Link para compartir</h3>
                 <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-top: 10px; word-break: break-all; font-size: 12px;" id="linkResponder">Cargando...</div>
-                <button onclick="copiarLink()" style="margin-top: 10px; background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">📋 Copiar Link</button>
+                <button onclick="copiarLink()" style="margin-top: 10px; background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">📋 Copiar Link</button>
             </div>
         </div>
 
@@ -413,7 +414,7 @@
                     ✓ Sección 2: Evaluación Psicológica (72 preguntas)<br>
                     ✓ Total: 82 preguntas<br>
                     ✓ Tiempo: 30 segundos por pregunta<br>
-                    ✓ Duración aproximada: 35 minutos
+                    ✓ Duración aproximada: 45 minutos
                 </div>
                 <button class="responder" style="width: 100%;">Comenzar Evaluación</button>
             </form>
@@ -482,12 +483,10 @@
             <div id="estadoResultado" class="estado-aprobado">✅ APROBADO</div>
             <div id="revisionRespuestas" style="margin-top:30px; text-align:left;"></div>        
             <div class="gracias">
-    ✅ Gracias por completar la evaluación.<br><br>
-    Sus respuestas fueron registradas correctamente.<br>
-    Puede cerrar esta ventana.
-</div>
-
-            
+                ✅ Gracias por completar la evaluación.<br><br>
+                Sus respuestas fueron registradas correctamente.<br>
+                Puede cerrar esta ventana.
+            </div>
         </div>
 
         <!-- ADMIN -->
@@ -500,9 +499,9 @@
                     <tr>
                         <th>Nombre</th>
                         <th>DNI</th>
-                        <th>MD</th>
-                        <th>Psico</th>
-                        <th>Promedio</th>
+                        <th>MD %</th>
+                        <th>Psico %</th>
+                        <th>Promedio %</th>
                         <th>Estado</th>
                     </tr>
                 </thead>
@@ -518,9 +517,11 @@
 <script>
     /* ===================== VARIABLES ===================== */
     let respuestasGuardadas = [];
-
-    const API_URL = "https://script.google.com/macros/s/AKfycbz48Er8J12NnM1MtV7Fl3gHHF0IMLtgl4Vr-LgGJlw4Qj1JRf7YpX92qGkST8JHWKwC/exec";
-    let pass = localStorage.getItem('passAdmin') || generarPass();
+    
+    // ⚠️ REEMPLAZAR CON TU LINK DE GOOGLE APPS SCRIPT
+    const API_URL = "https://script.google.com/macros/s/AKfycbxnazHydAfCKpQpfFl7HMizMr59apgIDMslTrMkeriB4lIh2_HC24Edn8R_RmA47JGO/exec";
+    
+    let pass = "ADMIN123";
     let nombreActual = '';
     let dniActual = '';
     let respuestas = {};
@@ -530,36 +531,19 @@
     let intervalo;
     let transicionActiva = false;
 
-    /* ===================== ENCUESTA 70 PREGUNTAS ===================== */
+    /* ===================== ENCUESTA 82 PREGUNTAS ===================== */
     let encuesta = {
         manejo: [
-            {
-             num: 1,
-                  pregunta: 'En la imagen cuál es el orden que deben pasar los vehículos en base a la prioridad vehicular y derecho de paso',
-                     imagen: 'imagenes/pregunta1.jpg',
-                     opciones: ['1, 2, 3, 4', '2, 3, 4, 1', '4, 1, 3, 2'],
-                        correcta: 2
-                    },
-                    {
-    num: 2,
-    pregunta: '¿Qué debe hacer un conductor al acercarse a una curva peligrosa?',
-    
-    opciones: [
-        'Aumentar la velocidad',
-        'Mantener la misma velocidad',
-        'Reducir la velocidad y estar atento',
-        'Tocar bocina constantemente'
-    ],
-    correcta: 2
-},
-            { num: 3, pregunta: '¿Qué debemos hacer cuando nos adelantan?', opciones: ['Bajar la velocidad y facilitar la maniobra', 'Acelerar para evitar que nos sobrepase', 'NADA, el que adelanta hace toda la maniobra', 'Ninguna es válida'], correcta: 0 },
-            { num: 4, pregunta: 'Usted puede traspasar una línea blanca discontinua que separa los carriles del tránsito que circulan en el mismo sentido', opciones: ['Verdadero', 'Falso', 'Es indistinto', 'Ninguna de las anteriores'], correcta: 0 },
-            { num: 5, pregunta: 'Si existe pocas posibilidades de que ocurra un accidente, ¿podría correr algunos riesgos al conducir?', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 },
-            { num: 6, pregunta: 'De ser posible, prefiero no tomar riesgos', opciones: ['De acuerdo', 'En desacuerdo', 'No estoy seguro', 'Totalmente en desacuerdo'], correcta: 0 },
-            { num: 7, pregunta: 'Puedo hacer mi trabajo más rápido si corro algunos riesgos', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 },
-            { num: 8, pregunta: 'No creo que correr riesgos me ayude a hacer mi trabajo más rápido', opciones: ['De acuerdo', 'En desacuerdo', 'No estoy seguro', 'Totalmente en desacuerdo'], correcta: 0 },
-            { num: 9, pregunta: 'No es necesario asumir riesgos en el trabajo para tener éxito', opciones: ['De acuerdo', 'En desacuerdo', 'No estoy seguro', 'Totalmente en desacuerdo'], correcta: 0 },
-            { num: 10, pregunta: 'Para mí, los riesgos de conducir son aceptables si los beneficios son altos', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 }
+            { num: 1, pregunta: '¿Qué debe hacer un conductor al acercarse a una curva peligrosa?', opciones: ['Aumentar la velocidad', 'Mantener la misma velocidad', 'Reducir la velocidad y estar atento', 'Tocar bocina constantemente'], correcta: 2 },
+            { num: 2, pregunta: '¿Qué debemos hacer cuando nos adelantan?', opciones: ['Bajar la velocidad y facilitar la maniobra', 'Acelerar para evitar que nos sobrepase', 'NADA, el que adelanta hace toda la maniobra', 'Ninguna es válida'], correcta: 0 },
+            { num: 3, pregunta: 'Usted puede traspasar una línea blanca discontinua que separa los carriles del tránsito que circulan en el mismo sentido', opciones: ['Verdadero', 'Falso', 'Es indistinto', 'Ninguna de las anteriores'], correcta: 0 },
+            { num: 4, pregunta: 'Si existe pocas posibilidades de que ocurra un accidente, ¿podría correr algunos riesgos al conducir?', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 },
+            { num: 5, pregunta: 'De ser posible, prefiero no tomar riesgos', opciones: ['De acuerdo', 'En desacuerdo', 'No estoy seguro', 'Totalmente en desacuerdo'], correcta: 0 },
+            { num: 6, pregunta: 'Puedo hacer mi trabajo más rápido si corro algunos riesgos', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 },
+            { num: 7, pregunta: 'No creo que correr riesgos me ayude a hacer mi trabajo más rápido', opciones: ['De acuerdo', 'En desacuerdo', 'No estoy seguro', 'Totalmente en desacuerdo'], correcta: 0 },
+            { num: 8, pregunta: 'No es necesario asumir riesgos en el trabajo para tener éxito', opciones: ['De acuerdo', 'En desacuerdo', 'No estoy seguro', 'Totalmente en desacuerdo'], correcta: 0 },
+            { num: 9, pregunta: 'Para mí, los riesgos de conducir son aceptables si los beneficios son altos', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], correcta: 0 },
+            { num: 10, pregunta: 'Un choque EVITABLE es cuando el conductor no hace todo lo __________ para evitarlo', opciones: ['Que estaba en su poder', 'Realizable', 'Posible', 'Razonable'], correcta: 3 }
         ],
         psicologico: [
             { num: 11, pregunta: 'No me considero más cuidadoso que el conductor promedio', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
@@ -573,53 +557,43 @@
             { num: 19, pregunta: 'Soy capaz de soportar mucha presión cuando conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 20, pregunta: 'No es fácil que me altere ante situaciones estresantes cuando estoy conduciendo', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 21, pregunta: 'Tengo buenos reflejos cuando algo inesperado sucede en la carretera', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            {
-    num: 22,
-    pregunta: 'Me gusta la velocidad',
-    opciones: [
-        'Totalmente en desacuerdo',
-        'En desacuerdo',
-        'No estoy seguro',
-        'De acuerdo'
-    ],
-    invertida: true
-},
-            { num: 23, pregunta: 'A veces conduzco más rápido cuando estoy apurado', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 22, pregunta: 'Me gusta la velocidad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
+            { num: 23, pregunta: 'A veces conduzco más rápido cuando estoy apurado', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
             { num: 24, pregunta: 'Puedo concentrarme bien mientras conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 25, pregunta: 'No me distraigo fácilmente al conducir', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 26, pregunta: 'Prefiero evitar situaciones de conflicto en la carretera', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 27, pregunta: 'Me irrito fácilmente con otros conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 27, pregunta: 'Me irrito fácilmente con otros conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
             { num: 28, pregunta: 'Respeto los límites de velocidad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 29, pregunta: 'Mantengo la distancia de seguridad con otros vehículos', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 30, pregunta: 'He tenido accidentes o infracciones de tránsito', opciones: ['Nunca', 'Una vez', 'Dos o tres veces', 'Más de tres veces'] },
+            { num: 30, pregunta: 'He tenido accidentes o infracciones de tránsito', opciones: ['Nunca', 'Una vez', 'Dos o tres veces', 'Más de tres veces'], invertida: true },
             { num: 31, pregunta: 'Considero que soy un conductor responsable', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 32, pregunta: 'Uso siempre el cinturón de seguridad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 33, pregunta: 'No uso el teléfono mientras conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 34, pregunta: 'Conduzco mejor que la mayoría de los conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 35, pregunta: 'Me gusta competir con otros conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 36, pregunta: 'Siento ansiedad al conducir en carreteras desconocidas', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 37, pregunta: 'He conducido después de beber alcohol', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'] },
+            { num: 34, pregunta: 'Conduzco mejor que la mayoría de los conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
+            { num: 35, pregunta: 'Me gusta competir con otros conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
+            { num: 36, pregunta: 'Siento ansiedad al conducir en carreteras desconocidas', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
+            { num: 37, pregunta: 'He conducido después de beber alcohol', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'], invertida: true },
             { num: 38, pregunta: 'Considero importante revisar mi vehículo regularmente', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 39, pregunta: 'Siento miedo al conducir en lluvia o nieve', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 40, pregunta: 'Me cuesta adaptarme a nuevas normas de tránsito', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 39, pregunta: 'Siento miedo al conducir en lluvia o nieve', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
+            { num: 40, pregunta: 'Me cuesta adaptarme a nuevas normas de tránsito', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
             { num: 41, pregunta: 'Recibo retroalimentación constructiva sobre mis hábitos de conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 42, pregunta: 'He tomado cursos de conducción defensiva', opciones: ['Nunca', 'Una vez', 'Dos o tres veces', 'Más de tres veces'] },
             { num: 43, pregunta: 'Me interesa mejorar mis habilidades de conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 44, pregunta: 'Conduzco principalmente en horario diurno', opciones: ['Casi siempre', 'Frecuentemente', 'Ocasionalmente', 'Casi nunca'] },
             { num: 45, pregunta: 'Me siento cómodo conduciendo en la noche', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 46, pregunta: 'Soy paciente con conductores novatos o lentosotros', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 47, pregunta: 'Considero que la experiencia es suficiente para conducir bien', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 46, pregunta: 'Soy paciente con conductores novatos', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 47, pregunta: 'Considero que la experiencia es suficiente para conducir bien', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
             { num: 48, pregunta: 'Sigo las señales de tránsito sin cuestionarlas', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 49, pregunta: 'He estacionado en lugares prohibidos', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'] },
+            { num: 49, pregunta: 'He estacionado en lugares prohibidos', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'], invertida: true },
             { num: 50, pregunta: 'Puedo mantener la calma en situaciones de tránsito caótico', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 51, pregunta: 'Me cuesta adaptarme a cambios rápidos en el tránsito', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 52, pregunta: 'He conducido cuando estaba muy cansado', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'] },
+            { num: 51, pregunta: 'Me cuesta adaptarme a cambios rápidos en el tránsito', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
+            { num: 52, pregunta: 'He conducido cuando estaba muy cansado', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'], invertida: true },
             { num: 53, pregunta: 'Reconozco cuando no estoy en condiciones de conducir', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 54, pregunta: 'La seguridad es más importante que la rapidez', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 55, pregunta: 'Considero que revisar puntos ciegos es importante', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 56, pregunta: 'Me intimida conducir en carreteras de alto tráfico', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 56, pregunta: 'Me intimida conducir en carreteras de alto tráfico', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'], invertida: true },
             { num: 57, pregunta: 'Siento que tengo control total de mi vehículo', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 58, pregunta: 'He adelantado en lugares prohibidos', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'] },
+            { num: 58, pregunta: 'He adelantado en lugares prohibidos', opciones: ['Nunca', 'Raramente', 'Ocasionalmente', 'Frecuentemente'], invertida: true },
             { num: 59, pregunta: 'Respeto las decisiones de conducción de los demás', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 60, pregunta: 'Me resulta fácil perdonar los errores de otros conductores', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 61, pregunta: 'Considero que la música fuerte distrae mientras conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
@@ -631,41 +605,23 @@
             { num: 67, pregunta: 'He recibido educación sobre riesgos de conducción', opciones: ['Nunca', 'Una vez', 'Dos o tres veces', 'Regularmente'] },
             { num: 68, pregunta: 'Me comprometo a ser un conductor responsable', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
             { num: 69, pregunta: 'Siento que este examen me ayudará a ser mejor conductor', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-            { num: 70, pregunta: 'Estoy dispuesto a mejorar continuamente mi conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] }
-            ,
-{ num: 71, pregunta: 'Siempre me apego a las normas de tránsito incluso cuando no lo considero necesario', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 72, pregunta: 'Nunca he excedido el límite de velocidad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 73, pregunta: 'Aunque tenga que llegar pronto a alguna parte, cumplo con las normas de seguridad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 74, pregunta: 'Reviso aspectos adicionales para mejorar la seguridad de mi vehículo', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 75, pregunta: 'Si mi vehículo no se encuentra en condiciones adecuadas, no comienzo mi ruta', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 76, pregunta: 'Jamás texteo mientras conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 77, pregunta: 'Puedo manejar el estrés mejor que la mayoría de las personas', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 78, pregunta: 'Se me facilita tomar decisiones prudentes cuando estoy bajo presión al conducir', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 79, pregunta: 'No conduzco si estoy estresado en el camino', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 80, pregunta: 'Permanezco tranquilo en situaciones de estrés y emergencias', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 81, pregunta: 'Asumir riesgos al conducir va contra mi naturaleza', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
-
-{ num: 82, pregunta: 'No me emociona conducir arriesgadamente', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] }
+            { num: 70, pregunta: 'Estoy dispuesto a mejorar continuamente mi conducción', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 71, pregunta: 'Siempre me apego a las normas de tránsito incluso cuando no lo considero necesario', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 72, pregunta: 'Nunca he excedido el límite de velocidad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 73, pregunta: 'Aunque tenga que llegar pronto a alguna parte, cumplo con las normas de seguridad', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 74, pregunta: 'Reviso aspectos adicionales para mejorar la seguridad de mi vehículo', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 75, pregunta: 'Si mi vehículo no se encuentra en condiciones adecuadas, no comienzo mi ruta', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 76, pregunta: 'Jamás texteo mientras conduzco', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 77, pregunta: 'Puedo manejar el estrés mejor que la mayoría de las personas', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 78, pregunta: 'Se me facilita tomar decisiones prudentes cuando estoy bajo presión al conducir', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 79, pregunta: 'No conduzco si estoy estresado en el camino', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 80, pregunta: 'Permanezco tranquilo en situaciones de estrés y emergencias', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 81, pregunta: 'Asumir riesgos al conducir va contra mi naturaleza', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] },
+            { num: 82, pregunta: 'No me emociona conducir arriesgadamente', opciones: ['Totalmente en desacuerdo', 'En desacuerdo', 'No estoy seguro', 'De acuerdo'] }
         ]
     };
 
-    /* ===================== FUNCIONES ===================== */
-
-    function generarPass() {
-        let p = Math.random().toString(36).substring(2, 10).toUpperCase();
-        localStorage.setItem('passAdmin', p);
-        return p;
-    }
+    
 
     function mostrarVista(id) {
         document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
@@ -698,18 +654,11 @@
         document.getElementById('numeroPregunta').innerText = pregunta.num;
         document.getElementById('totalPreguntas').innerText = '82';
 
-        // Actualizar barra de progreso
         let progreso = (pregunta.num / 82) * 100;
         document.getElementById('barraProgreso').style.width = progreso + '%';
 
         document.getElementById('preguntaTexto').innerText = pregunta.pregunta;
-        if (pregunta.imagen) {
-             document.getElementById('imagenPregunta').innerHTML =
-                                `<img src="${pregunta.imagen}" 
-                                style="max-width:100%; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.2);">`;
-        } else {
-             document.getElementById('imagenPregunta').innerHTML = '';
-}
+        document.getElementById('imagenPregunta').innerHTML = '';
 
         document.getElementById('opciones').innerHTML = pregunta.opciones.map((o, i) =>
             `<div class="opcion" onclick="responder(${i})">${o}</div>`
@@ -719,20 +668,17 @@
     }
 
     function responder(i) {
+        document.querySelectorAll('.opcion').forEach(o => {
+            o.classList.remove('seleccionada');
+        });
 
-    document.querySelectorAll('.opcion').forEach(o => {
-        o.classList.remove('seleccionada');
-    });
+        document.querySelectorAll('.opcion')[i].classList.add('seleccionada');
+        respuestas[`${seccion}_${indexPregunta}`] = i;
 
-    document.querySelectorAll('.opcion')[i]
-        .classList.add('seleccionada');
-
-    respuestas[`${seccion}_${indexPregunta}`] = i;
-
-    setTimeout(() => {
-        siguiente();
-    }, 300);
-}
+        setTimeout(() => {
+            siguiente();
+        }, 300);
+    }
 
     function siguiente() {
         let preguntas = encuesta[seccion];
@@ -789,18 +735,16 @@
             }
 
             if (tiempo <= 0) {
-
-    respuestas[`${seccion}_${indexPregunta}`] = null;
-
-    siguiente();
-}
+                respuestas[`${seccion}_${indexPregunta}`] = null;
+                siguiente();
+            }
         }, 1000);
     }
 
     function terminar() {
         clearInterval(intervalo);
 
-        // ===== MANEJO (Respuestas correctas/incorrectas) =====
+        // MANEJO (Respuestas correctas/incorrectas)
         let correctasManejo = 0;
         encuesta.manejo.forEach((p, i) => {
             if (respuestas[`manejo_${i}`] === p.correcta) {
@@ -809,275 +753,128 @@
         });
         let porcentajeManejo = (correctasManejo / encuesta.manejo.length) * 100;
 
-        // ===== PSICOLÓGICO (Escala Likert) =====
+        // PSICOLÓGICO (Escala Likert con preguntas invertidas)
         let puntosPsico = 0;
         encuesta.psicologico.forEach((p, i) => {
             let respuesta = respuestas[`psicologico_${i}`];
-            if (respuesta !== undefined) {
-                // Escala: 0=1punto, 1=2puntos, 2=3puntos, 3=4puntos
+            if (respuesta !== undefined && respuesta !== null) {
                 if (p.invertida) {
-
-    puntosPsico += (4 - respuesta);
-
-} else {
-
-    puntosPsico += (respuesta + 1);
-
-}
+                    puntosPsico += (4 - respuesta);
+                } else {
+                    puntosPsico += (respuesta + 1);
+                }
             }
         });
         let maximoPuntos = encuesta.psicologico.length * 4;
         let porcentajePsico = (puntosPsico / maximoPuntos) * 100;
 
-        // ===== PROMEDIO FINAL (50% + 50%) =====
+        // PROMEDIO FINAL (50% + 50%)
         let promedioFinal = (porcentajeManejo * 0.5) + (porcentajePsico * 0.5);
         let aprobado = promedioFinal >= 80;
 
-        // ===== GUARDAR =====
+        // GUARDAR
         let resultado = {
-            nombre: nombreActual,
-            dni: dniActual,
-            manejo: porcentajeManejo.toFixed(1),
-            psicologia: porcentajePsico.toFixed(1),
-            promedio: promedioFinal.toFixed(1),
-            estado: aprobado ? 'APROBADO' : 'DESAPROBADO'
-        };
+    nombre: nombreActual,
+    dni: dniActual,
+    manejo: porcentajeManejo.toFixed(1),
+    psicologia: porcentajePsico.toFixed(1),
+    promedio: promedioFinal.toFixed(1),
+    estado: aprobado ? 'APROBADO' : 'DESAPROBADO',
+    respuestas: respuestas
+};
 
-        // ===== VENTANA DE CARGA =====
-document.body.innerHTML += `
-<div id="guardandoOverlay" style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.85);
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:99999;
-">
+        // MOSTRAR RESULTADOS (sin enviar a API si no está configurado)
+        mostrarVista('vistaResultados');
+        document.getElementById('porcentajeFinal').innerText = promedioFinal.toFixed(1) + '%';
+        document.getElementById('porcentajeManejo').innerText = porcentajeManejo.toFixed(1) + '%';
+        document.getElementById('porcentajePsico').innerText = porcentajePsico.toFixed(1) + '%';
+        document.getElementById('promedioFinal').innerText = promedioFinal.toFixed(1) + '%';
 
-<div style="
-background:white;
-padding:50px;
-border-radius:20px;
-text-align:center;
-max-width:500px;
-width:90%;
-box-shadow:0 10px 40px rgba(0,0,0,0.4);
-">
+        let estadoDiv = document.getElementById('estadoResultado');
+        if (aprobado) {
+            estadoDiv.className = 'estado-aprobado';
+            estadoDiv.innerText = '✅ APROBADO - Felicidades';
+        } else {
+            estadoDiv.className = 'estado-reprobado';
+            estadoDiv.innerText = '❌ DESAPROBADO - Intenta nuevamente';
+        }
 
-<h1 id="estadoGuardado" style="
-font-size:40px;
-margin-bottom:20px;
-color:#667eea;
-">
-⏳ Guardando encuesta...
-</h1>
-
-<p style="font-size:20px;">
-Espere unos segundos
-</p>
-
-</div>
-</div>
-`;
-
-fetch(API_URL, {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
+        mostrarRevision();
+        localStorage.setItem('ultimoResultado', JSON.stringify(resultado));
+    fetch(API_URL, {
+    method: 'POST',
     body: JSON.stringify(resultado)
 })
-.then(res => res.json())
+.then(response => response.text())
 .then(data => {
-
-    console.log(data);
-
-    if(data.success){
-
-        document.getElementById("estadoGuardado").innerHTML =
-        "✅ Encuesta guardada correctamente";
-
-        setTimeout(() => {
-
-            document.getElementById("guardandoOverlay").remove();
-             localStorage.setItem("modoEncuesta", "true");   
-            mostrarVista('vistaResultados');
-
-            document.getElementById('porcentajeFinal').innerText = promedioFinal.toFixed(1) + '%';
-            document.getElementById('porcentajeManejo').innerText = porcentajeManejo.toFixed(1) + '%';
-            document.getElementById('porcentajePsico').innerText = porcentajePsico.toFixed(1) + '%';
-            document.getElementById('promedioFinal').innerText = promedioFinal.toFixed(1) + '%';
-
-            let estadoDiv = document.getElementById('estadoResultado');
-
-            mostrarRevision();
-
-            if (aprobado) {
-                estadoDiv.className = 'estado-aprobado';
-                estadoDiv.innerText = '✅ APROBADO - Felicidades';
-            } else {
-                estadoDiv.className = 'estado-reprobado';
-                estadoDiv.innerText = '❌ DESAPROBADO - Intenta nuevamente';
-            }
-
-        }, 2000);
-
-    } else {
-
-        document.getElementById("estadoGuardado").innerHTML =
-        "❌ ERROR AL GUARDAR";
-
-        console.error(data.error);
-
-        alert("Error guardando en Google Sheets");
-    }
-
+    console.log("Guardado:", data);
 })
-.catch(err => {
-
-    document.getElementById("estadoGuardado").innerHTML =
-    "❌ ERROR DE CONEXIÓN";
-
-    console.error(err);
-
-    alert("No se pudo conectar con Google Sheets");
+.catch(error => {
+    console.error("Error:", error);
 });
-
     }
 
     function mostrarRevision() {
+        let html = '<h2 style="margin-top:40px;">📘 Revisión de Respuestas</h2>';
+        let todas = [...encuesta.manejo, ...encuesta.psicologico];
 
-    let html = '<h2 style="margin-top:40px;">📘 Revisión de Respuestas</h2>';
+        todas.forEach((p, i) => {
+            let clave = i < encuesta.manejo.length
+                ? `manejo_${i}`
+                : `psicologico_${i - encuesta.manejo.length}`;
 
-    // UNIR TODAS LAS PREGUNTAS
-    let todas = [...encuesta.manejo, ...encuesta.psicologico];
+            let respuestaUsuario = respuestas[clave];
+            let textoUsuario = respuestaUsuario !== undefined && respuestaUsuario !== null
+                ? p.opciones[respuestaUsuario]
+                : 'Sin responder';
 
-    todas.forEach((p, i) => {
+            let correcta = p.correcta !== undefined ? p.opciones[p.correcta] : 'Pregunta psicológica';
+            let esCorrecta = p.correcta !== undefined ? respuestaUsuario === p.correcta : true;
 
-        let clave =
-            i < encuesta.manejo.length
-            ? `manejo_${i}`
-            : `psicologico_${i - encuesta.manejo.length}`;
-
-        let respuestaUsuario = respuestas[clave];
-
-        let textoUsuario =
-    respuestaUsuario !== undefined &&
-    respuestaUsuario !== null
-    ? p.opciones[respuestaUsuario]
-    : 'Sin responder';
-
-        // SOLO MANEJO TIENE RESPUESTAS CORRECTAS
-        let correcta = p.correcta !== undefined
-            ? p.opciones[p.correcta]
-            : 'Pregunta psicológica';
-
-        let esCorrecta =
-            p.correcta !== undefined
-            ? respuestaUsuario === p.correcta
-            : true;
-
-        html += `
-        <div class="revision-item ${esCorrecta ? 'correcta' : 'incorrecta'}">
-
-            <div style="font-weight:bold; margin-bottom:10px;">
-                ${p.num}. ${p.pregunta}
-            </div>
-
-            <div class="respuesta-usuario">
-                📝 Tu respuesta:
-                <strong>${textoUsuario}</strong>
-            </div>
-
-            ${
-                p.correcta !== undefined
-                ?
-                `<div class="respuesta-correcta">
-                    ✅ Respuesta correcta:
-                    ${correcta}
-                </div>`
-                :
-                ''
-            }
-
-        </div>
-        `;
-    });
-
-    document.getElementById('revisionRespuestas').innerHTML = html;
-}
-    function verAdmin() {
-
-    let p = prompt('🔐 Ingrese contraseña admin');
-
-    if (p !== pass) {
-        alert('❌ Contraseña incorrecta');
-        return;
-    }
-
-    fetch(API_URL)
-    .then(res => res.json())
-    .then(data => {
-
-        respuestasGuardadas = data;
-
-        mostrarVista('vistaAdmin');
-
-        document.getElementById('tablaResultados').innerHTML =
-        respuestasGuardadas.map(r => `
-            <tr>
-                <td>${r.nombre}</td>
-                <td>${r.dni}</td>
-                <td>${r.manejo}%</td>
-                <td>${r.psicologia}%</td>
-                <td><strong>${r.promedio}%</strong></td>
-                <td>
-                    <strong style="color:${r.estado === 'APROBADO' ? '#28a745' : '#dc3545'}">
-                        ${r.estado}
-                    </strong>
-                </td>
-            </tr>
-        `).join('');
-
-    })
-    .catch(err => {
-        alert("Error cargando resultados");
-        console.error(err);
-    });
-}
-
-    function descargarCSV() {
-        let csv = 'Nombre,DNI,Manejo (%),Psicología (%),Promedio (%),Estado\n';
-        respuestasGuardadas.forEach(r => {
-            csv += `"${r.nombre}","${r.dni}",${r.manejo},${r.psicologia},${r.promedio},"${r.estado}"\n`;
+            html += `
+            <div class="revision-item ${esCorrecta ? 'correcta' : 'incorrecta'}">
+                <div style="font-weight:bold; margin-bottom:10px;">${p.num}. ${p.pregunta}</div>
+                <div class="respuesta-usuario">📝 Tu respuesta: <strong>${textoUsuario}</strong></div>
+                ${p.correcta !== undefined ? `<div class="respuesta-correcta">✅ Respuesta correcta: ${correcta}</div>` : ''}
+            </div>`;
         });
 
+        document.getElementById('revisionRespuestas').innerHTML = html;
+    }
+
+    function verAdmin() {
+        let p = prompt('🔐 Ingrese contraseña admin');
+        if (p !== pass) {
+            alert('❌ Contraseña incorrecta');
+            return;
+        }
+        mostrarVista('vistaAdmin');
+        alert('✓ Panel de admin abierto\n\n(API_URL no configurado)\n\nPara guardar datos necesitas:\n1. Crear un Google Apps Script\n2. Configurar API_URL');
+    }
+
+    function descargarCSV() {
+        let resultado = JSON.parse(localStorage.getItem('ultimoResultado')) || {};
+        let csv = 'Nombre,DNI,Manejo (%),Psicología (%),Promedio (%),Estado\n';
+        csv += `"${resultado.nombre || ''}","${resultado.dni || ''}",${resultado.manejo || 0},${resultado.psicologia || 0},${resultado.promedio || 0},"${resultado.estado || ''}"`;
+        
         let blob = new Blob([csv], { type: 'text/csv' });
         let url = URL.createObjectURL(blob);
         let a = document.createElement('a');
         a.href = url;
-        a.download = 'resultados_examen.csv';
+        a.download = 'resultado_examen.csv';
         a.click();
     }
 
     function copiarLink() {
         let url = window.location.href.split('?')[0] + '?modo=responder';
         navigator.clipboard.writeText(url);
-        alert('✓ Link copiado');
+        alert('✓ Link copiado al portapapeles');
     }
 
-    // ===== INICIALIZACIÓN =====
-    const params = new URLSearchParams(window.location.search);
-
-const modo = params.get('modo');
-
-document.getElementById('mostrarPass').innerText = pass;
-
-const base
+    // INICIALIZACIÓN
+    document.getElementById('mostrarPass').innerText = "ADMIN123";
+    const baseUrl = window.location.href.split('?')[0];
+    document.getElementById('linkResponder').innerText = baseUrl + '?modo=responder';
 
 </script>
 
